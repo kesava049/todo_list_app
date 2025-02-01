@@ -35,15 +35,15 @@ app.get('/todos', async (req,res)=>{
 })
 
 app.put('/completed', async (req,res)=>{
-    // const createPayload = req.body
-    // const parsedPayload = createTodo.safeParse(createPayload);
+    const createPayload = req.body
+    const parsedPayload = updateTodo.safeParse(createPayload);
 
-    // if(!parsedPayload.success){
-    //     res.status(411).json({
-    //         msg: "Invalid inputs!"
-    //     })
-    //     return;
-    // }
+    if(!parsedPayload.success){
+        res.status(411).json({
+            msg: "Invalid inputs!"
+        })
+        return;
+    }
     await addTodo.updateOne({
         _id: req.body.id 
     },{

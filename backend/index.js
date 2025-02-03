@@ -1,9 +1,11 @@
 const express = require('express');
 const { createTodo, updateTodo } = require('./types');
 const { addTodo } = require('./schema/db');
+const cors = require('cors');
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
 app.post('/todo', async (req,res)=>{
 
@@ -17,20 +19,20 @@ app.post('/todo', async (req,res)=>{
     }
     // putting it in mongoDB...
 
-    await addTodo.create({
-        title: createPayload.title,
-        description: createPayload.description,
-        completed: false
-    })
+    // await addTodo.create({
+    //     title: createPayload.title,
+    //     description: createPayload.description,
+    //     completed: false
+    // })
     res.status(200).json({
         msg: "successfully added a Todo"
     })
 })
 
 app.get('/todos', async (req,res)=>{
-    const alltodos = await addTodo.find({});
+    // const alltodos = await addTodo.find({});
     res.send({
-        alltodos
+        alltodos: []
     })
 })
 

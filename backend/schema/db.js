@@ -8,7 +8,10 @@ mongoose.connect('mongodb+srv://kalepallikesavulareddy:ugPHI1XXuRwbCw6A@cluster0
 const newtodoSchema = new mongoose.Schema({
     title: String,
     description: String,
-    completed: Boolean
+    completed: {
+        type: Boolean,
+        default: false
+    }
 })
 
 const addTodo = mongoose.model('addTodo', newtodoSchema);

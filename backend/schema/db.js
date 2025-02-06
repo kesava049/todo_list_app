@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 mongoose.connect('mongodb+srv://kalepallikesavulareddy:ugPHI1XXuRwbCw6A@cluster0.tzpqn.mongodb.net/todoApp');
 
-const newtodoSchema = new mongoose.Schema({
+const newtodoSchema = mongoose.Schema({
     title: String,
     description: String,
     completed: {

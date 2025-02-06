@@ -7,7 +7,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.post('/todo', async (req,res)=>{
+app.post('/addTodo', async (req,res)=>{
 
     const createPayload = req.body
     const parsedPayload = createTodo.safeParse(createPayload);
@@ -19,22 +19,25 @@ app.post('/todo', async (req,res)=>{
     }
     // putting it in mongoDB...
 
-    // await addTodo.create({
-    //     title: createPayload.title,
-    //     description: createPayload.description,
-    //     completed: false
-    // })
+    await addTodo.create({
+        title: createPayload.title,
+        description: createPayload.description,
+        completed: false
+    })
     res.status(200).json({
         msg: "successfully added a Todo"
     })
 })
 
-app.get('/todos', async (req,res)=>{
-    // const alltodos = await addTodo.find({});
-    res.send({
-        alltodos: []
-    })
-})
+app.get('/getTodos', async (req, res) => {
+    try {
+        const alltodos = await addTodo.find({});
+        res.status(200).json({ alltodos });  // Return the fetched todos
+    } catch (error) {
+        console.error("Error fetching todos:", error);
+        res.status(500).json({ message: "Failed to fetch todos", error: error.message });
+    }
+});
 
 app.put('/completed', async (req,res)=>{
     const createPayload = req.body
@@ -46,14 +49,17 @@ app.put('/completed', async (req,res)=>{
         })
         return;
     }
-    await addTodo.updateOne({
-        _id: req.body.id 
-    },{
-        completed: true
-    })
-    res.json({
-        msg: "Todo marked as Done!"
-    })
+    try {
+        const updatedTodo = await addTodo.updateOne(
+            { _id: req.body.id }, 
+            { completed: true }
+        );
+        return res.status(200).json({ msg: "Todo marked as Done!" });
+
+    } catch (error) {
+        console.error("Error updating todo:", error);
+        return res.status(500).json({ msg: "Failed to mark todo as completed." });
+    }
 
 })
 
